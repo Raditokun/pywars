@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://b7n63ni4uo37f"]
+
+[ext_resource type="Script" uid="uid://mpmnol10midy" path="res://scenes/arena.gd" id="1_arena"]
+
+[sub_resource type="StandardMaterial3D" id="Material_worker"]
+albedo_color = Color(0.23, 0.93, 0.95, 1)
+
+[sub_resource type="CylinderMesh" id="Mesh_worker"]
+material = SubResource("Material_worker")
+top_radius = 0.23
+bottom_radius = 0.32
+height = 0.46
+radial_segments = 8
+
+[sub_resource type="Environment" id="Environment_arena"]
+background_mode = 1
+background_color = Color(0.07, 0.1, 0.13, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.78, 0.87, 1, 1)
+ambient_light_energy = 0.58
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_hud"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.09, 0.13, 0.17, 0.95)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="Arena" type="Node3D" unique_id=534711236]
+script = ExtResource("1_arena")
+
+[node name="Board" type="Node3D" parent="." unique_id=1907646517]
+
+[node name="Worker" type="MeshInstance3D" parent="." unique_id=1919516866]
+mesh = SubResource("Mesh_worker")
+
+[node name="Environment" type="WorldEnvironment" parent="." unique_id=1673166768]
+environment = SubResource("Environment_arena")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1125644115]
+transform = Transform3D(0.8480481, 0.4287137, -0.31147876, 0, 0.5877853, 0.809017, 0.52991927, -0.68608534, 0.49847022, 0, 0, 0)
+light_energy = 0.95
+shadow_enabled = true
+
+[node name="Camera" type="Camera3D" parent="." unique_id=1400807161]
+transform = Transform3D(1, 0, 0, 0, 0.6000001, 0.79999995, 0, -0.79999995, 0.6000001, 0, 14, 10.5)
+projection = 1
+current = true
+size = 12.5
+
+[node name="TickTimer" type="Timer" parent="." unique_id=423010369]
+process_callback = 0
+wait_time = 0.3
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1292583752]
+
+[node name="Panel" type="PanelContainer" parent="HUD" unique_id=341056481]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 262.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBox_hud")
+
+[node name="Readouts" type="VBoxContainer" parent="HUD/Panel" unique_id=384570850]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TickLabel" type="Label" parent="HUD/Panel/Readouts" unique_id=1089193380]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tick  0"
+
+[node name="OreLabel" type="Label" parent="HUD/Panel/Readouts" unique_id=181463952]
+unique_name_in_owner = true
+layout_mode = 2
+text = "HQ Ore  0"
+
+[node name="InventoryLabel" type="Label" parent="HUD/Panel/Readouts" unique_id=376257322]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Worker Ore  0 / 3"
+
+[node name="ActionLabel" type="Label" parent="HUD/Panel/Readouts" unique_id=475061035]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Worker action  Idle"
+
+[node name="PythonPanel" type="PanelContainer" parent="HUD" unique_id=1415189014]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -317.0
+offset_top = 16.0
+offset_right = -16.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBox_hud")
+
+[node name="Readouts" type="VBoxContainer" parent="HUD/PythonPanel" unique_id=1290175221]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PythonStatus" type="Label" parent="HUD/PythonPanel/Readouts" unique_id=375642861]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Python  Starting"
+
+[node name="PythonFile" type="Label" parent="HUD/PythonPanel/Readouts" unique_id=1302035537]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Behavior  worker.py"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="PythonError" type="Label" parent="HUD/PythonPanel/Readouts" unique_id=1749141761]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+clip_text = true
+text_overrun_behavior = 3
+
+[connection signal="timeout" from="TickTimer" to="." method="_on_tick_timer_timeout"]
